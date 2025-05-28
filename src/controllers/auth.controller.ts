@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../prisma/client";
 import { encrypt } from "../utils/encryption";
 import * as Yup from "yup";
+import { generateToken } from "../utils/jwt";
 
 type TRegister = {
   username: string;
@@ -60,7 +61,6 @@ export default {
       res.status(200).json({
         message: "Success registration!",
         data: User,
-        token: null,
       });
     } catch (error) {
       const err = error as unknown as Error;
@@ -78,6 +78,7 @@ export default {
           OR: [{ email: identifier }, { username: identifier }],
         },
         select: {
+          id: true,
           email: true,
           username: true,
           password: true, // Needed for verification
@@ -103,9 +104,18 @@ export default {
         return;
       }
 
+      const token = generateToken({
+        id: userByIdentifier.id,
+      });
+
       res.status(200).json({
         message: "Login success",
-        data: userByIdentifier,
+        data: {
+          username: userByIdentifier.username,
+          email: userByIdentifier.email,
+          password: userByIdentifier.password,
+        },
+        token: token,
       });
     } catch (error) {
       const err = error as unknown as Error;
