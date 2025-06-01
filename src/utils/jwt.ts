@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { SECRET } from "./env";
-import { User } from "@prisma/client";
 
 export interface IUserToken {
   id?: string;
