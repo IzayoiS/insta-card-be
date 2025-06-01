@@ -60,6 +60,13 @@ export default {
     }
   },
   async register(req: Request, res: Response) {
+    /**
+     #swagger.tags = ['Auth']
+		 #swagger.requestBody ={
+     required: true, 
+     schema : {$ref: "#components/schemas/RegisterRequest"}
+     }
+		 */
     const { username, email, password, confirmPassword } =
       req.body as TRegister;
 
@@ -92,6 +99,13 @@ export default {
     }
   },
   async login(req: Request, res: Response) {
+    /**
+		 #swagger.tags =['Auth']
+		 #swagger.requestBody = {
+		 	required: true,
+			schema: {$ref: "#/components/schemas/LoginRequest"}
+		 }
+		 */
     const { identifier, password } = req.body as TLogin;
     try {
       const userByIdentifier = await prisma.user.findFirst({
@@ -147,6 +161,12 @@ export default {
     }
   },
   async me(req: IReqUser, res: Response) {
+    /**
+		 #swagger.tags =['Auth']
+		 #swagger.security = [{
+		 	"bearerAuth" : []
+		 }]
+		 */
     try {
       const user = req.user;
 
