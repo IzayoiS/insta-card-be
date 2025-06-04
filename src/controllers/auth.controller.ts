@@ -47,22 +47,6 @@ const registerValidateSchema = Yup.object({
 });
 
 export default {
-  async getUsers(req: Request, res: Response) {
-    try {
-      const users = await prisma.user.findMany({
-        omit: {
-          password: true,
-        },
-      });
-      res.status(200).json(users);
-    } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
-    }
-  },
   async register(req: Request, res: Response) {
     /**
      #swagger.tags = ['Auth']

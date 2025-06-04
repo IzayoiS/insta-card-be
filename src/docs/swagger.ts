@@ -34,6 +34,10 @@ const doc = {
         password: "Admin123",
         confirmPassword: "Admin123",
       },
+      UpdateUserRequest: {
+        username: "admin",
+        email: "admin@mail.com",
+      },
     },
   },
 };
