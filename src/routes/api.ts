@@ -2,6 +2,7 @@ import express from "express";
 import authController from "../controllers/auth.controller";
 import userController from "../controllers/user.controller";
 import authMiddleware from "../middlewares/auth.middleware";
+import linkController from "../controllers/link.controller";
 
 const router = express.Router();
 
@@ -15,5 +16,11 @@ router.get("/user", userController.getUsers);
 router.get("/user/:username", userController.getUserByUsername);
 router.patch("/user/:username", userController.updateUser);
 router.delete("/user/:username", userController.deleteUserByUsername);
+
+// Link
+router.get("/link", linkController.getLinks);
+router.post("/link", authMiddleware, linkController.createLink);
+
+// Profile
 
 export default router;
