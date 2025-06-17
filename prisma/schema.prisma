@@ -32,7 +32,7 @@ model Profile {
   bio       String?
   avatar    String?
   userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -44,7 +44,7 @@ model Link {
   order     Int
   visible   Boolean  @default(true)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -55,7 +55,7 @@ model SocialMedia {
   url       String
   icon      String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
