@@ -1,16 +1,17 @@
-import express from "express";
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
 
-import router from "./routes/api";
+import router from './routes/api';
+import { errorHandler } from './middlewares/error.middleware';
 
-import db from "./utils/database";
-import docs from "./docs/router";
+import db from './utils/database';
+import docs from './docs/router';
 
 async function init() {
   try {
     const result = await db();
 
-    console.log("database status: ", result);
+    console.log('database status: ', result);
 
     const app = express();
 
@@ -20,14 +21,15 @@ async function init() {
 
     const PORT = 3000;
 
-    app.get("/", (req, res) => {
-			res.status(200).json({
-				message: "Server is running",
-				data: null,
-			});
-		});
+    app.get('/', (req, res) => {
+      res.status(200).json({
+        message: 'Server is running',
+        data: null,
+      });
+    });
 
-    app.use("/api", router);
+    app.use(router);
+    app.use(errorHandler);
     docs(app);
 
     app.listen(PORT, () => {

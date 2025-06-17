@@ -4,7 +4,7 @@ import authMiddleware from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-router.get('/link', linkController.getLinks);
-router.post('/link', authMiddleware, linkController.createLink);
+router.get('/', linkController.getLinks);
+router.post('/', authMiddleware, linkController.createLink);
 
 export default router;

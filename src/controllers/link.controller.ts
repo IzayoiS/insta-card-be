@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { prisma } from '../prisma/client';
+import linkService from '../services/link.service';
 
 export default {
   async createLink(req: Request, res: Response) {
@@ -11,15 +12,6 @@ export default {
      */
     try {
       const userId = (req as any).user.id;
-
-      if (!userId) {
-        res.status(401).json({
-          message: 'Unauthorized',
-          data: null,
-        });
-        return;
-      }
-
       const { title, url, order, visible } = req.body;
 
       if (!title || !url) {
@@ -30,14 +22,11 @@ export default {
         return;
       }
 
-      const newLink = await prisma.link.create({
-        data: {
-          title,
-          url,
-          order: order ?? 0,
-          visible: visible ?? true,
-          userId,
-        },
+      const newLink = await linkService.createLink(userId, {
+        title,
+        url,
+        order,
+        visible,
       });
 
       res.status(201).json({
