@@ -1,14 +1,20 @@
-import { NextFunction, Request, Response } from "express";
-import { prisma } from "../prisma/client";
+import { NextFunction, Request, Response } from 'express';
+import { prisma } from '../prisma/client';
 
 export default {
   async createLink(req: Request, res: Response) {
+    /**
+    #swagger.tags=['Link']
+    #swagger.security = [{
+		 	"bearerAuth" : []
+		 }]
+     */
     try {
       const userId = (req as any).user.id;
 
       if (!userId) {
         res.status(401).json({
-          message: "Unauthorized",
+          message: 'Unauthorized',
           data: null,
         });
         return;
@@ -18,7 +24,7 @@ export default {
 
       if (!title || !url) {
         res.status(400).json({
-          message: "Title and URL are required",
+          message: 'Title and URL are required',
           data: null,
         });
         return;
@@ -35,7 +41,7 @@ export default {
       });
 
       res.status(201).json({
-        message: "Link created successfully",
+        message: 'Link created successfully',
         data: newLink,
       });
     } catch (error) {
@@ -47,11 +53,14 @@ export default {
     }
   },
   async getLinks(req: Request, res: Response) {
+    /**
+    #swagger.tags=['Link']
+     */
     try {
       const Links = await prisma.link.findMany();
 
       res.status(200).json({
-        message: "show all link",
+        message: 'show all link',
         data: Links,
       });
     } catch (error) {
