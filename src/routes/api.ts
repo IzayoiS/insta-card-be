@@ -1,19 +1,14 @@
-import express from "express";
-import authController from "../controllers/auth.controller";
-import userController from "../controllers/user.controller";
-import authMiddleware from "../middlewares/auth.middleware";
+import express from 'express';
+import authRoute from './auth.route';
+import linkRoute from './link.route';
+import profileRoute from './profile.route';
+import userRoute from './user.route';
 
 const router = express.Router();
 
-// Auth
-router.post("/auth/register", authController.register);
-router.post("/auth/login", authController.login);
-router.get("/auth/me", authMiddleware, authController.me);
-
-// User
-router.get("/user", userController.getUsers);
-router.get("/user/:username", userController.getUserByUsername);
-router.patch("/user/:username", userController.updateUser);
-router.delete("/user/:username", userController.deleteUserByUsername);
+router.use('/auth', authRoute);
+router.use('/link', linkRoute);
+router.use('/profile', profileRoute);
+router.use('/users', userRoute);
 
 export default router;
