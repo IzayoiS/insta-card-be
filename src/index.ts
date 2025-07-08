@@ -2,31 +2,40 @@ import express from "express";
 import cors from "cors";
 
 import router from "./routes/api";
+
 import db from "./utils/database";
 import docs from "./docs/router";
 
-const app = express();
+async function init() {
+  try {
+    const result = await db();
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+    console.log("database status: ", result);
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Server is running",
-    data: null,
-  });
-});
+    const app = express();
 
-app.use("/api", router);
-docs(app);
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
-db()
-  .then(() => {
-    console.log("✅ Database connected");
-  })
-  .catch((err) => {
-    console.error("❌ Database connection failed", err);
-  });
+    const PORT = 3000;
 
-export default app;
+    app.get("/", (req, res) => {
+      res.status(200).json({
+        message: "Server is running",
+        data: null,
+      });
+    });
+
+    app.use("/api", router);
+    docs(app);
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+init();
