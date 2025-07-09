@@ -20,10 +20,9 @@ async function init() {
     app.use(express.urlencoded({ extended: true }));
 
     const PORT = 3000;
-    app.get("/", (req, res) => {
+    app.get('/', (req, res) => {
       res.status(200).json({
-        message: "Server is running",
-        data: null,
+        message: 'Server is running',
       });
     });
 
