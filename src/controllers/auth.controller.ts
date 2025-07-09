@@ -18,8 +18,20 @@ type TLogin = {
 };
 
 const registerValidateSchema = Yup.object({
-  username: Yup.string().required(),
-  email: Yup.string().required(),
+  username: Yup.string()
+    .required()
+    .test("is-unique-username", "Username is already taken", async (value) => {
+      if (!value) return false;
+      const user = await prisma.user.findUnique({ where: { username: value } });
+      return !user;
+    }),
+  email: Yup.string()
+    .required()
+    .test("is-unique-email", "Email is already registered", async (value) => {
+      if (!value) return false;
+      const user = await prisma.user.findUnique({ where: { email: value } });
+      return !user;
+    }),
   password: Yup.string()
     .required()
     .min(6, "Password must be at least 6 characters")
@@ -121,7 +133,7 @@ export default {
 
       if (!validatePassword) {
         res.status(403).json({
-          message: "user not found",
+          message: "password is wrong",
           data: null,
         });
         return;
