@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import { prisma } from "../prisma/client";
-import { encrypt } from "../utils/encryption";
-import * as Yup from "yup";
-import { generateToken } from "../utils/jwt";
-import { IReqUser } from "../middlewares/auth.middleware";
+import { NextFunction, Request, Response } from 'express';
+import { prisma } from '../prisma/client';
+import { encrypt } from '../utils/encryption';
+import * as Yup from 'yup';
+import { generateToken } from '../utils/jwt';
+import { IReqUser } from '../middlewares/auth.middleware';
 
 type TRegister = {
   username: string;
@@ -20,42 +20,42 @@ type TLogin = {
 const registerValidateSchema = Yup.object({
   username: Yup.string()
     .required()
-    .test("is-unique-username", "Username is already taken", async (value) => {
+    .test('is-unique-username', 'Username is already taken', async (value) => {
       if (!value) return false;
       const user = await prisma.user.findUnique({ where: { username: value } });
       return !user;
     }),
   email: Yup.string()
     .required()
-    .test("is-unique-email", "Email is already registered", async (value) => {
+    .test('is-unique-email', 'Email is already registered', async (value) => {
       if (!value) return false;
       const user = await prisma.user.findUnique({ where: { email: value } });
       return !user;
     }),
   password: Yup.string()
     .required()
-    .min(6, "Password must be at least 6 characters")
+    .min(6, 'Password must be at least 6 characters')
     .test(
-      "at-least-one-uppercase-letter",
-      "Contains at least one oppercase letter",
+      'at-least-one-uppercase-letter',
+      'Contains at least one oppercase letter',
       (value) => {
         if (!value) return false;
         const regex = /^(?=.*[A-Z])/;
         return regex.test(value);
-      }
+      },
     )
     .test(
-      "at-least-one-number",
-      "Contains at least one oppercase letter",
+      'at-least-one-number',
+      'Contains at least one oppercase letter',
       (value) => {
         if (!value) return false;
         const regex = /^(?=.*\d)/;
         return regex.test(value);
-      }
+      },
     ),
   confirmPassword: Yup.string()
     .required()
-    .oneOf([Yup.ref("password"), ""], "Password must be matched"),
+    .oneOf([Yup.ref('password'), ''], 'Password must be matched'),
 });
 
 export default {
@@ -87,7 +87,7 @@ export default {
       });
 
       res.status(200).json({
-        message: "Success registration!",
+        message: 'Success registration!',
         data: { username: User.username, email: User.email },
       });
     } catch (error) {
@@ -122,7 +122,7 @@ export default {
 
       if (!userByIdentifier) {
         res.status(403).json({
-          message: "user not found",
+          message: 'user not found',
           data: null,
         });
         return;
@@ -133,7 +133,7 @@ export default {
 
       if (!validatePassword) {
         res.status(403).json({
-          message: "password is wrong",
+          message: 'password is wrong',
           data: null,
         });
         return;
@@ -144,7 +144,7 @@ export default {
       });
 
       res.status(200).json({
-        message: "Login success",
+        message: 'Login success',
         data: {
           username: userByIdentifier.username,
           email: userByIdentifier.email,
@@ -174,11 +174,12 @@ export default {
         select: {
           email: true,
           username: true,
+          profile: true,
         },
       });
 
       res.status(200).json({
-        message: "Success get user profile",
+        message: 'Success get user profile',
         data: result,
       });
     } catch (error) {

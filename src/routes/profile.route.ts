@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.delete('/:id', authMiddleware, profileController.deleteProfile);
 router.patch('/:id', authMiddleware, profileController.updateProfile);
-router.get('/:id', profileController.getProfileById);
+router.get('/:id', authMiddleware, profileController.getProfileById);
 
 export default router;
