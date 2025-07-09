@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts",
     "docs": "ts-node src/docs/swagger.ts",
     "prepare": "husky",
     "lint": "eslint . --ext .ts"
+    "build": "tsc",
+    "postinstall": "prisma generate "
   },
   "author": "",
   "license": "ISC",
