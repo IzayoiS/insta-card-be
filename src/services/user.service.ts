@@ -12,6 +12,9 @@ class UserService {
     return await prisma.user.findFirst({
       where: { id },
       omit: { password: true },
+      include: {
+        profile: true,
+      },
     });
   }
   async updateUserById(id: string, updateData: object) {

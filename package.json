@@ -6,9 +6,9 @@
     "dev": "ts-node-dev src/index.ts",
     "docs": "ts-node src/docs/swagger.ts",
     "prepare": "husky",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
     "build": "tsc",
-    "postinstall": "prisma generate "
+    "postinstall": "prisma generate"
   },
   "author": "",
   "license": "ISC",

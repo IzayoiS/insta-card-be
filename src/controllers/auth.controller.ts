@@ -8,6 +8,7 @@ import { IReqUser } from '../middlewares/auth.middleware';
 type TRegister = {
   username: string;
   email: string;
+  fullName: string;
   password: string;
   confirmPassword: string;
 };
@@ -25,6 +26,17 @@ const registerValidateSchema = Yup.object({
       const user = await prisma.user.findUnique({ where: { username: value } });
       return !user;
     }),
+  fullName: Yup.string()
+    .required()
+    .test(
+      'at-least-one-uppercase-letter',
+      'Contains at least one oppercase letter',
+      async (value) => {
+        if (!value) return false;
+        const regex = /^(?=.*[A-Z])/;
+        return regex.test(value);
+      },
+    ),
   email: Yup.string()
     .required()
     .test('is-unique-email', 'Email is already registered', async (value) => {
@@ -67,13 +79,14 @@ export default {
      schema : {$ref: "#components/schemas/RegisterRequest"}
      }
 		 */
-    const { username, email, password, confirmPassword } =
+    const { username, email, fullName, password, confirmPassword } =
       req.body as TRegister;
 
     try {
       await registerValidateSchema.validate({
         username,
         email,
+        fullName,
         password,
         confirmPassword,
       });
@@ -83,12 +96,17 @@ export default {
           username,
           email,
           password: encrypt(password),
+          profile: {
+            create: {
+              fullName,
+            },
+          },
         },
       });
 
       res.status(200).json({
         message: 'Success registration!',
-        data: { username: User.username, email: User.email },
+        data: User,
       });
     } catch (error) {
       const err = error as unknown as Error;

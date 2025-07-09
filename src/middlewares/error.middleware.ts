@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-import Yup from 'yup';
+import { ValidationError } from 'yup';
 
 export function errorHandler(
   err: Error,
@@ -8,9 +8,9 @@ export function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
-  if (err instanceof Yup.ValidationError) {
+  if (err instanceof ValidationError) {
     res.status(400).json({
-      message: err.inner[0].message,
+      message: err.inner[0]?.message || err.message,
       data: null,
     });
     return;
@@ -24,7 +24,7 @@ export function errorHandler(
   }
 
   res.status(500).json({
-    message: `Internal Server Error! Error: ${JSON.stringify(err)}`,
+    message: `Internal Server Error! Error: ${err.message}`,
     data: null,
   });
 }
