@@ -17,7 +17,7 @@ async function init() {
 
     app.use(
       cors({
-        origin: 'https://insta-card-fe.vercel.app',
+        origin: ['https://insta-card-fe.vercel.app', 'http://localhost:5173'],
       }),
     );
     app.use(express.json());
