@@ -8,5 +8,6 @@ router.get('/', authMiddleware, linkController.getLinks);
 router.post('/', authMiddleware, linkController.createLink);
 router.delete('/:id', authMiddleware, linkController.deleteLink);
 router.patch('/:id', authMiddleware, linkController.updateLink);
+router.get('/:username', linkController.getPublicLinks);
 
 export default router;

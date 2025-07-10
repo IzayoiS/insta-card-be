@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import * as Yup from 'yup';
+import { IReqUser } from '../middlewares/auth.middleware';
 import { prisma } from '../prisma/client';
 import { encrypt } from '../utils/encryption';
-import * as Yup from 'yup';
 import { generateToken } from '../utils/jwt';
-import { IReqUser } from '../middlewares/auth.middleware';
 
 type TRegister = {
   username: string;

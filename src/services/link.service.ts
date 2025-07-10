@@ -20,6 +20,14 @@ class LinkService {
       where: { userId },
     });
   }
+  async getLinksByUsername(username: string) {
+    return await prisma.link.findMany({
+      where: {
+        user: { username },
+      },
+      orderBy: { order: 'asc' },
+    });
+  }
   async getLinkById(id: string) {
     return await prisma.link.findUnique({ where: { id } });
   }

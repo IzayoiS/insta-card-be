@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
-import { prisma } from '../prisma/client';
+import { Request, Response } from 'express';
 import linkService from '../services/link.service';
 
 export default {
@@ -41,6 +40,36 @@ export default {
       });
     }
   },
+
+  async getPublicLinks(req: Request, res: Response) {
+    /**
+     #swagger.tags=['Public']
+    */
+    const { username } = req.params;
+    try {
+      const links = await linkService.getLinksByUsername(username);
+
+      if (!links || links.length === 0) {
+        res.status(404).json({
+          message: 'User or links not found',
+          data: null,
+        });
+        return;
+      }
+
+      res.status(200).json({
+        message: 'Public links fetched',
+        data: links,
+      });
+    } catch (error) {
+      const err = error as unknown as Error;
+      res.status(400).json({
+        message: err.message,
+        data: null,
+      });
+    }
+  },
+
   async getLinks(req: Request, res: Response) {
     /**
     #swagger.tags=['Link']
